@@ -7,24 +7,66 @@
     <link rel="stylesheet" type="text/css" href="/css/styles.css">
     <script src="/js/main.js"></script>
 </head>
-<body>
-    <h1>Spring Boot!</h1>
-   
-    <h3 th:text="'Today is: ' + ${date}"></h3>
-    
-    <table>
-        <tr>
-            <th>Name</th>
-            <th>Surname</th>
-            <th>Email</th>
-            <th>Group</th>
-        </tr>
-        <tr th:each="student : ${students}">
-            <td th:text="${student.name}"></td>
-            <td th:text="${student.surname}"></td>
-            <td th:text="${student.email}"></td>
-            <td th:text="${student.studentGroup}"></td>
-        </tr>
-    </table>
-</body>
+<div class="timer-display">
+    <input type="text" id="hours" placeholder="Hours" style="width:4%; text-align:right; margin-right:3px">
+    <input type="text" id="minutes" placeholder="Minutes" style="width:4%; text-align:right; margin-right:3px">
+    <input type="text" id="seconds" placeholder="Seconds" style="text-align:right; width:4%; margin-right:3px">
+      <p id="timer"></p>
+      <br><br>
+		<button class="start-timer" onclick="style.display = 'none'" id="startTimer">Start Timer</button>
+  </div>
 </html>
+<script>
+
+    var hours = 0;
+    var minutes = 0;
+    var seconds = 0;
+    var interval = null;
+
+    function disapear(){
+        document.getElementById('hours').style.display = 'none';
+        document.getElementById('minutes').style.display = 'none';
+        document.getElementById('seconds').style.display = 'none';
+    }
+
+    document.getElementById('hours').addEventListener('change', e => {
+        hours = +e.target.value;
+    });
+    
+    document.getElementById('minutes').addEventListener('change', e => {
+        minutes = +e.target.value;
+    });
+    
+    document.getElementById('seconds').addEventListener('change', e => {
+        seconds = +e.target.value;
+    });
+
+    document.getElementById('startTimer').addEventListener('click', () => {
+        if (hours == 0 && minutes == 0 && seconds == 0) {
+            var timeInSeconds = 300;
+        } else {
+            var timeInSeconds = (hours * 60 * 60) + (minutes * 60) + seconds;
+        }
+        
+
+        
+      var displayTime = () => {
+        var displayHours = Math.floor(timeInSeconds / (60 * 60));
+        var remainder = timeInSeconds - (displayHours * 60 * 60);
+        var displayMinutes = Math.floor(remainder / 60);
+        var displaySeconds = remainder - (displayMinutes * 60);
+
+        document.getElementById("timer").innerHTML = displayHours + " : " + displayMinutes + " : " + displaySeconds;
+
+      };
+        interval = setInterval(() => {
+            disapear();
+            displayTime();
+            timeInSeconds -= 1;
+        if (timeInSeconds < 0) {
+            clearInterval(interval);
+        }
+      }, 1000);
+    });
+
+</script>
