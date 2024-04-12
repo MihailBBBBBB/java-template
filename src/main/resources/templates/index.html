@@ -8,12 +8,16 @@
     <script src="/js/main.js"></script>
 </head>
 <div class="timer-display">
+    <input type="checkbox" id="task">
+    <input type="text" id="taskText">  
+    <br><br>
     <input type="text" id="hours" placeholder="Hours" style="width:4%; text-align:right; margin-right:3px">
     <input type="text" id="minutes" placeholder="Minutes" style="width:4%; text-align:right; margin-right:3px">
     <input type="text" id="seconds" placeholder="Seconds" style="text-align:right; width:4%; margin-right:3px">
-      <p id="timer"></p>
+    <p id="timer"></p>
       <br><br>
 		<button class="start-timer" onclick="style.display = 'none'" id="startTimer">Start Timer</button>
+        <button class="reset-timer" id="startTimer">Reset Timer</button>
   </div>
 </html>
 <script>
@@ -29,6 +33,8 @@
         document.getElementById('seconds').style.display = 'none';
     }
 
+    document.getElementById("task").style.display = "none";
+
     document.getElementById('hours').addEventListener('change', e => {
         hours = +e.target.value;
     });
@@ -41,25 +47,30 @@
         seconds = +e.target.value;
     });
 
+
+
+
     document.getElementById('startTimer').addEventListener('click', () => {
         if (hours == 0 && minutes == 0 && seconds == 0) {
             var timeInSeconds = 300;
         } else {
             var timeInSeconds = (hours * 60 * 60) + (minutes * 60) + seconds;
         }
-        
 
-        
-      var displayTime = () => {
-        var displayHours = Math.floor(timeInSeconds / (60 * 60));
-        var remainder = timeInSeconds - (displayHours * 60 * 60);
-        var displayMinutes = Math.floor(remainder / 60);
-        var displaySeconds = remainder - (displayMinutes * 60);
+        var displayTime = () => {
+            var displayHours = Math.floor(timeInSeconds / (60 * 60));
+            var remainder = timeInSeconds - (displayHours * 60 * 60);
+            var displayMinutes = Math.floor(remainder / 60);
+            var displaySeconds = remainder - (displayMinutes * 60);
 
         document.getElementById("timer").innerHTML = displayHours + " : " + displayMinutes + " : " + displaySeconds;
 
       };
         interval = setInterval(() => {
+            document.getElementById("task").style.display = "block";
+            document.getElementById('task').addEventListener('click', () => {
+                clearInterval(interval);
+            })
             disapear();
             displayTime();
             timeInSeconds -= 1;
@@ -67,6 +78,33 @@
             clearInterval(interval);
         }
       }, 1000);
-    });
+    })
+
+
+
+
+    document.getElementById("reset-timer").addEventListener('click', () => {
+        var displayTime = () => {
+            var displayHours = Math.floor(timeInSeconds / (60 * 60));
+            var remainder = timeInSeconds - (displayHours * 60 * 60);
+            var displayMinutes = Math.floor(remainder / 60);
+            var displaySeconds = remainder - (displayMinutes * 60);
+
+        document.getElementById("timer").innerHTML = displayHours + " : " + displayMinutes + " : " + displaySeconds;
+
+      };
+        interval = setInterval(() => {
+            document.getElementById("task").style.display = "block";
+            document.getElementById('task').addEventListener('click', () => {
+                clearInterval(interval);
+            })
+            disapear();
+            displayTime();
+            timeInSeconds -= 1;
+        if (timeInSeconds < 0) {
+            clearInterval(interval);
+        }
+      }, 1000);
+    })
 
 </script>
