@@ -7,18 +7,53 @@
     <link rel="stylesheet" type="text/css" href="/css/styles.css">
     <script src="/js/main.js"></script>
 </head>
-<!-- <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <div class="timer"></div>
-<button type="button" id="butt">+</button> -->
-<input type="text" id="taskInput">
-<button id="addTaskBtn">Add Task</button>
+<button type="button" id="butt">+</button>
+<body>
+  <div class="container">
+    <div class="todoBlock">
+      <!-- main title holder -->
+      <div class="titleHolder">
+        <h1>To Do List</h1>
+      </div>
+      <!-- todo list -->
+      <div class="todoList">
+        <!-- list holder -->
+        <div class="listHolder">
+          <ul class="list">
+
+          </ul>
+        </div>
+        <!-- form holder -->
+        <div class="formHolder">
+          <div class="col big">
+            <input type="text" id="addInput">
+          </div>
+          <div class="col">
+            <button type="button" id="addBtn" class="btn-primary">Add Item</button>
+          </div>
+          <div class="col">
+            <button type="button" id="toggleBtn" class="btn-primary">Hide List</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- importing custom js -->
+  <script src="js/main.js"></script>
+</body>
 </html>
 
-<!-- <style>
+<style>
     body {
     position: relative;
     background: #dddddd;
   margin: 15px;
+}
+
+.btn-icon.remove:before {
+  content: '\f2ed';
 }
 
 .timer {
@@ -59,30 +94,124 @@
     position: center;
     background: #ff0256;
 }
-</style> -->
+
+ul {
+  list-style-type: none;
+  list-style-position: outside;
+}
+
+li {
+  font-weight: bold;
+  font-family: 'Courier New', monospace;
+  color: white;
+  background-color: grey;
+  padding:20px;
+  margin: 15px;
+  border-radius: 5px;
+}
+</style>
 
 <script>
-    const taskInput = document.getElementById("taskInput");
-  const addTaskBtn = document.getElementById("addTaskBtn");
 
-  taskInput.addEventListener("keydown", function(event) {
-    if (event.key === "Enter") {
-      addTask();
-    }
-  });
+const divList = document.querySelector('.listHolder');
 
-  addTaskBtn.addEventListener("click", function() {
-    addTask();
-  });
+function addLists() {
+  if (document.getElementById('addInput').value == '') {
+    alert('Enter the list name please!!!');
+  } else {
+    const ul = document.querySelector('ul');
+    const newTask = document.createElement('li');
+    newTask.innerText = document.getElementById('addInput').value;
+    ul.appendChild(newTask);
+    document.getElementById('addInput').value = '';
+    createBtn(newTask);
+  }
+}
 
-  function addTask() {
-    const task = taskInput.value;
-    if (task.trim() !== "") {
-      // Add task to the list
-      console.log("Task added:", task);
-      taskInput.value = "";
+// add list when clicked on add item button
+document.getElementById('addBtn').addEventListener('click', () => {
+  addLists();
+});
+
+// add list when pressed enter
+document.getElementById('addInput').addEventListener('keyup', (event) => {
+  if(event.which === 13) {
+    addLists();
+  }
+});
+  
+  const listUl = document.querySelector('.list');
+  const lis = listUl.children;
+
+  function createBtn(li) {
+        //               <span class="timer__part timer__part--hours">00</span>
+    //               <span class="timer__part">:</span>
+    //               <span class="timer__part timer__part--minutes">00</span>
+    //               <span class="timer__part">:</span>
+    //               <span class="timer__part timer__part--seconds">00</span>
+    //               <button type="button" class="timer__btn timer__btn--control timer__btn--start">
+    //                   <span class="material-icons">play_arrow</span>
+    //               </button>
+    //               <button type="button" class="timer__btn timer__btn--reset">
+    //                   <span class="material-icons">timer</span>
+    //               </button>
+    // create remove button
+    const remove = document.createElement('button');
+    remove.className = 'btn-icon remove';
+    li.appendChild(remove);
+
+    const hours = document.createElement('span');
+    hours.className = "timer__part timer__part--hours";
+    hours.innerHTML = "00";
+    li.appendChild(hours);
+
+    const part1 = document.createElement('span');
+    part1.className = "timer__part";
+    part1.innerHTML = ":";
+    li.appendChild(part1);
+
+    const minutes = document.createElement('span');
+    minutes.className = "timer__part timer__part--minutes";
+    minutes.innerHTML = "00";
+    li.appendChild(minutes);
+
+    const part2 = document.createElement('span');
+    part2.className = "timer__part";
+    part2.innerHTML = ":";
+    li.appendChild(part2);
+
+    const seconds = document.createElement('span');
+    seconds.className = "timer__part timer__part--seconds";
+    seconds.innerHTML = "00";
+    li.appendChild(seconds);
+
+    const start = document.createElement('button');
+    start.className = "timer__btn timer__btn--control timer__btn--start";
+    li.appendChild(start);
+
+    const reset = document.createElement('button');
+    reset.className = "timer__btn timer__btn--reset";
+    li.appendChild(reset);
+
+    return li;
+
+  }
+
+  for (var i = 0; i < lis.length; i++) {
+    createBtn(lis[i]);
+}
+
+divList.addEventListener('click', (event) => {
+  if (event.target.tagName === 'BUTTON') {
+    const button = event.target;
+    const li = button.parentNode;
+    const ul = li.parentNode;
+    if (button.className === 'btn-icon remove') {
+      ul.removeChild(li);
     }
   }
+});
+
 
     // document.getElementById('butt').addEventListener('click', () => {
     //     test();
